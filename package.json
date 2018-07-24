@@ -1,0 +1,35 @@
+{
+  "name": "pixel-perfect-collider",
+  "version": "1.0.0",
+  "description": "Pixel perfect collision detector",
+  "main": "build/index.js",
+  "typings": "typings/index.d.ts",
+  "devDependencies": {
+    "@types/pixi.js": "^4.8.0",
+    "@types/webfontloader": "^1.6.29",
+    "awesome-typescript-loader": "^5.2.0",
+    "gif-capture-canvas": "^1.0.1",
+    "html-webpack-plugin": "^3.2.0",
+    "particle-pattern-emitter": "^1.0.2",
+    "pixi-filters": "^2.6.1",
+    "pixi.js": "^4.8.1",
+    "sounds-some-sounds": "^1.0.4",
+    "typescript": "^2.9.2",
+    "webfontloader": "^1.6.28",
+    "webpack": "^4.16.2",
+    "webpack-cli": "^3.1.0",
+    "webpack-serve": "^2.0.2"
+  },
+  "scripts": {
+    "start": "webpack-serve --content docs",
+    "build": "webpack",
+    "build_sample": "webpack --env.sample"
+  },
+  "author": "abagames",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abagames/pixel-perfect-collider.git"
+  },
+  "homepage": "https://github.com/abagames/pixel-perfect-collider"
+}

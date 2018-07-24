@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta name="viewport" content="width=device-width, height=device-height,
+  user-scalable=no, initial-scale=1, maximum-scale=1">
+  <meta charset="utf-8" />
+  <title>pixel-perfect-collider</title>
+  <link rel="stylesheet" href="index.css" type="text/css" />
+</head>
+
+<body>
+  <div id="sampleName" style="display: none">
+    <%= htmlWebpackPlugin.options.title %>
+  </div>
+  <script>
+    var sampleName = window.location.search.substring(1);
+    sampleName = sampleName.replace(/\W/g, '');
+    if (sampleName.length <= 0) {
+      sampleName = document.getElementById('sampleName').innerText.trim();
+    }
+    document.title = "pixel-perfect-collider demo - " + sampleName;
+    var script = document.createElement('script');
+    script.src = sampleName + '.js';
+    document.body.appendChild(script);
+  </script>
+</body>
+
+</html>
