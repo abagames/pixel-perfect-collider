@@ -1,4 +1,5 @@
 import * as WebFont from "webfontloader";
+import * as PIXI from "pixi.js";
 import { screen } from "./screen";
 
 export let family: string;

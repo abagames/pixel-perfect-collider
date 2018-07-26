@@ -1,47 +1,20 @@
+import * as ppc from "..";
 import * as screen from "./screen";
-import * as ppc from "../index";
+import * as sa from "./simpleActor";
 
-let actors: Actor[] = [];
 let textures = {};
 const removePaddingRatio = 0.25;
 
 export function update() {
-  for (let i = 0; i < actors.length; ) {
-    const a = actors[i];
-    if (a.isAlive) {
-      a.update();
-    }
-    if (!a.isAlive) {
-      actors.splice(i, 1);
-    } else {
-      i++;
-    }
-  }
+  sa._pool.update();
 }
 
-export function get(name: string = null) {
-  return name == null ? actors : actors.filter(a => a.name === name);
-}
-
-export function removeAll() {
-  actors.forEach(a => {
-    a.remove();
-  });
-  actors = [];
-}
-
-export class Actor {
+export class Actor extends sa.SimpleActor {
   pos = { x: 0, y: 0 };
   size = { x: 0, y: 0 };
   sprite: PIXI.Sprite;
   collider: ppc.Collider;
   colliders: { [key: string]: ppc.Collider } = {};
-  name;
-  isAlive = true;
-
-  constructor() {
-    actors.push(this);
-  }
 
   setImage(image: HTMLImageElement, name: string, isAddingCollider = true) {
     let texture;
@@ -94,12 +67,10 @@ export class Actor {
   }
 
   remove() {
-    if (!this.isAlive) {
-      return;
-    }
-    this.isAlive = false;
-    if (this.sprite != null) {
+    let isRemoving = super.remove();
+    if (isRemoving && this.sprite != null) {
       screen.screen.removeChild(this.sprite);
     }
+    return isRemoving;
   }
 }

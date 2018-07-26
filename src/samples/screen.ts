@@ -23,7 +23,7 @@ export function init(
   const bloomFilter = new PIXIFilters.AdvancedBloomFilter({
     threshold: 0.1,
     bloomScale: 1,
-    brightness: 1,
+    brightness: 0.3,
     blur: 5
   });
   filterContainer.filters = [bloomFilter];
