@@ -38,7 +38,7 @@ export function emit(
   emitOptions: ppe.EmitOptions = {}
 ) {
   ppe.emit(patternName, x, y, angle, emitOptions).forEach(ppe => {
-    new sga.Actor(particle, ppe);
+    new sga.Actor(particle, ppe, pool);
   });
 }
 
