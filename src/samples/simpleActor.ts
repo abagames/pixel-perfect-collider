@@ -1,14 +1,21 @@
-export class SimpleActor {
+export class Actor {
   name;
   args: any[];
   isAlive = true;
-  pool = _pool;
+  ticks = 0;
+  pool = pool;
 
   constructor(public updateFunc: Function = null, ...args) {
     if (this.updateFunc != null) {
       this.name = updateFunc.name;
     }
     this.args = args;
+    if (args != null && args.length > 0) {
+      let lastArg = args[args.length - 1];
+      if (lastArg instanceof Pool) {
+        this.pool = lastArg;
+      }
+    }
     this.pool.add(this);
   }
 
@@ -16,6 +23,7 @@ export class SimpleActor {
     if (this.updateFunc != null) {
       this.updateFunc(this, ...this.args);
     }
+    this.ticks++;
   }
 
   remove() {
@@ -25,12 +33,16 @@ export class SimpleActor {
     this.isAlive = false;
     return true;
   }
+
+  isSpawning() {
+    return this.ticks === 0;
+  }
 }
 
-export class SimpleActorPool {
-  actors: SimpleActor[] = [];
+export class Pool {
+  actors: Actor[] = [];
 
-  add(actor: SimpleActor) {
+  add(actor: Actor) {
     this.actors.push(actor);
   }
 
@@ -62,4 +74,4 @@ export class SimpleActorPool {
   }
 }
 
-export let _pool = new SimpleActorPool();
+export let pool = new Pool();

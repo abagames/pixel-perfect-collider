@@ -38,33 +38,33 @@ export function emit(
   emitOptions: ppe.EmitOptions = {}
 ) {
   ppe.emit(patternName, x, y, angle, emitOptions).forEach(ppe => {
-    new Particle(particle, ppe);
+    new sa.Actor(particle, ppe);
   });
 }
 
 export function update() {
   ppe.update();
-  _pool.update();
+  pool.update();
 }
 
 export function removeAll() {
-  _pool.removeAll();
+  pool.removeAll();
 }
 
-let _pool = new sa.SimpleActorPool();
+let pool = new sa.Pool();
 
-class Particle extends sa.SimpleActor {
-  pos = { x: 0, y: 0 };
+interface Particle extends sa.Actor {
+  pos: { x: number; y: number };
   sprite: PIXI.Sprite;
-  baseSize = 16;
-  scale = new PIXI.Point();
-  pool = _pool;
-  isSpawning = true;
+  baseSize: number;
+  scale: PIXI.Point;
 }
 
 function particle(p: Particle, ppe: ppe.Particle) {
-  if (p.isSpawning) {
-    p.isSpawning = false;
+  if (p.isSpawning()) {
+    p.pos = { x: 0, y: 0 };
+    p.baseSize = 16;
+    p.scale = new PIXI.Point();
     p.sprite = new PIXI.Sprite(particleTexture);
     p.sprite.anchor.x = p.sprite.anchor.y = 0.5;
     p.sprite.scale = p.scale;

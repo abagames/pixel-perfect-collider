@@ -13,8 +13,8 @@ export function setOptions(_options: Options) {
 }
 
 export class Collider {
-  public anchor = { x: 0, y: 0 };
   private pos = { x: 0, y: 0 };
+  private anchor = { x: 0, y: 0 };
   private size = { x: 0, y: 0 };
   private pixelBits: number[][] = [];
 
@@ -68,6 +68,11 @@ export class Collider {
   setPos(x: number, y: number) {
     this.pos.x = Math.floor(x - this.size.x * this.anchor.x);
     this.pos.y = Math.floor(y - this.size.y * this.anchor.y);
+  }
+
+  setAnchor(x: number, y: number) {
+    this.anchor.x = x;
+    this.anchor.y = y;
   }
 
   test(other: Collider) {

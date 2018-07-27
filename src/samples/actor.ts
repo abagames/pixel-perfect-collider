@@ -6,10 +6,10 @@ let textures = {};
 const removePaddingRatio = 0.25;
 
 export function update() {
-  sa._pool.update();
+  sa.pool.update();
 }
 
-export class Actor extends sa.SimpleActor {
+export class Actor extends sa.Actor {
   pos = { x: 0, y: 0 };
   size = { x: 0, y: 0 };
   sprite: PIXI.Sprite;
@@ -42,7 +42,7 @@ export class Actor extends sa.SimpleActor {
         this.collider = c;
       } else {
         this.collider = new ppc.Collider(image);
-        this.collider.anchor.x = this.collider.anchor.y = 0.5;
+        this.collider.setAnchor(0.5, 0.5);
         this.colliders[name] = this.collider;
       }
     }
