@@ -1,6 +1,6 @@
 import * as ppe from "particle-pattern-emitter";
 import * as PIXI from "pixi.js";
-import * as sa from "./simpleActor";
+import * as sga from "./simpleGameActor";
 
 let particleContainer: PIXI.particles.ParticleContainer;
 let particleTexture: PIXI.Texture;
@@ -38,7 +38,7 @@ export function emit(
   emitOptions: ppe.EmitOptions = {}
 ) {
   ppe.emit(patternName, x, y, angle, emitOptions).forEach(ppe => {
-    new sa.Actor(particle, ppe);
+    new sga.Actor(particle, ppe);
   });
 }
 
@@ -51,9 +51,9 @@ export function removeAll() {
   pool.removeAll();
 }
 
-let pool = new sa.Pool();
+let pool = new sga.Pool();
 
-interface Particle extends sa.Actor {
+interface Particle extends sga.Actor {
   pos: { x: number; y: number };
   sprite: PIXI.Sprite;
   baseSize: number;

@@ -1,15 +1,15 @@
 import * as ppc from "..";
 import * as screen from "./screen";
-import * as sa from "./simpleActor";
+import * as sga from "./simpleGameActor";
 
 let textures = {};
 const removePaddingRatio = 0.25;
 
 export function update() {
-  sa.pool.update();
+  sga.pool.update();
 }
 
-export class Actor extends sa.Actor {
+export class Actor extends sga.Actor {
   pos = { x: 0, y: 0 };
   size = { x: 0, y: 0 };
   sprite: PIXI.Sprite;
