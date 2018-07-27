@@ -56,14 +56,12 @@ let pool = new sga.Pool();
 interface Particle extends sga.Actor {
   pos: { x: number; y: number };
   sprite: PIXI.Sprite;
-  baseSize: number;
   scale: PIXI.Point;
 }
 
 function particle(p: Particle, ppe: ppe.Particle) {
   if (p.isSpawning) {
     p.pos = { x: 0, y: 0 };
-    p.baseSize = 16;
     p.scale = new PIXI.Point();
     p.sprite = new PIXI.Sprite(particleTexture);
     p.sprite.anchor.x = p.sprite.anchor.y = 0.5;
@@ -81,6 +79,6 @@ function particle(p: Particle, ppe: ppe.Particle) {
     (Math.floor(ppe.color.r * 255) << 16) |
     (Math.floor(ppe.color.g * 255) << 8) |
     Math.floor(ppe.color.b * 255);
-  p.scale.x = p.scale.y = ppe.size / p.baseSize;
+  p.scale.x = p.scale.y = ppe.size / particleBaseSize;
   p.sprite.scale = p.scale;
 }

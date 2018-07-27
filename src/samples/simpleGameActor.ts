@@ -5,6 +5,7 @@ export class Actor {
   ticks = 0;
   isSpawning = true;
   pool = pool;
+  onRemove: Function;
 
   constructor(public updateFunc: Function = null, ...args) {
     if (this.updateFunc != null) {
@@ -30,10 +31,12 @@ export class Actor {
 
   remove() {
     if (!this.isAlive) {
-      return false;
+      return;
+    }
+    if (this.onRemove != null) {
+      this.onRemove();
     }
     this.isAlive = false;
-    return true;
   }
 }
 

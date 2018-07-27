@@ -1,9 +1,10 @@
 import * as PIXI from "pixi.js";
 import * as PIXIFilters from "pixi-filters";
 import * as particle from "./particle";
+import * as star from "./star";
 
 export let app: PIXI.Application;
-export let screen: PIXI.Container;
+export let container: PIXI.Container;
 export let size: number;
 
 export function init(
@@ -34,10 +35,11 @@ export function init(
   background.endFill();
   backgroundContainer.addChild(background);
   filterContainer.addChild(backgroundContainer);
+  star.init(app, filterContainer, padding);
   particle.init(app, filterContainer, padding);
-  screen = new PIXI.Container();
-  screen.x = screen.y = padding;
-  filterContainer.addChild(screen);
+  container = new PIXI.Container();
+  container.x = container.y = padding;
+  filterContainer.addChild(container);
   const edgeContainer = new PIXI.Container();
   const edge = new PIXI.Graphics();
   edge.beginFill(edgeColor);

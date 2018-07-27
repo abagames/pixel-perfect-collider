@@ -1,6 +1,7 @@
 import * as pag from "pixel-art-gen";
 import * as screen from "./screen";
 import { Actor, update as updateActors } from "./actor";
+import * as star from "./star";
 import * as particle from "./particle";
 
 let stage_: Actor;
@@ -13,6 +14,7 @@ window.onload = () => {
 
 function update() {
   requestAnimationFrame(update);
+  star.update();
   particle.update();
   updateActors();
 }

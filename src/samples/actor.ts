@@ -30,7 +30,7 @@ export class Actor extends sga.Actor {
       this.sprite.anchor.y = 0.5;
       this.sprite.x = this.pos.x;
       this.sprite.y = this.pos.y;
-      screen.screen.addChild(this.sprite);
+      screen.container.addChild(this.sprite);
     } else {
       this.sprite.texture = texture;
     }
@@ -46,6 +46,11 @@ export class Actor extends sga.Actor {
         this.colliders[name] = this.collider;
       }
     }
+    this.onRemove = () => {
+      if (this.sprite != null) {
+        screen.container.removeChild(this.sprite);
+      }
+    };
   }
 
   update() {
@@ -65,13 +70,5 @@ export class Actor extends sga.Actor {
     ) {
       this.remove();
     }
-  }
-
-  remove() {
-    let isRemoving = super.remove();
-    if (isRemoving && this.sprite != null) {
-      screen.screen.removeChild(this.sprite);
-    }
-    return isRemoving;
   }
 }

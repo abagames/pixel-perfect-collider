@@ -1,6 +1,6 @@
 import * as WebFont from "webfontloader";
 import * as PIXI from "pixi.js";
-import { screen } from "./screen";
+import { container } from "./screen";
 
 export let family: string;
 
@@ -29,6 +29,6 @@ export function add(x, y, size = 14, fill = "white") {
   });
   text.x = x;
   text.y = y;
-  screen.addChild(text);
+  container.addChild(text);
   return text;
 }
