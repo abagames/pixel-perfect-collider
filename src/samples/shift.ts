@@ -9,6 +9,7 @@ let stage_: Actor;
 window.onload = () => {
   screen.init();
   stage_ = new Actor(stage);
+  pag.setSeed(0);
   update();
 };
 
@@ -21,15 +22,18 @@ function update() {
 
 function stage(a: Actor) {
   if (a.isSpawning) {
-    new Actor(ship);
   }
-  if (Math.random() < 0.1) {
-    particle.emit("e1", Math.random() * 256, Math.random() * 256);
+  if (Math.random() < 0.05) {
+    new Actor(enemy);
   }
 }
 
-async function ship(a: Actor) {
+async function enemy(a) {
   if (a.isSpawning) {
+    const sx = Math.floor(Math.random() * 4) * 0.5 + 1.5;
+    const sy = Math.floor(Math.random() * 4) * 0.5 + 1.5;
+    a.pos.x = Math.random() * 256;
+    a.pos.y = -sy * 12;
     const images = await pag.generateImagesPromise(
       `
   --
@@ -41,14 +45,27 @@ async function ship(a: Actor) {
   `,
       {
         isMirrorX: true,
-        scale: 2,
-        scalePattern: 2,
+        scaleX: 2,
+        scaleY: 2,
+        scalePatternX: sx,
+        scalePatternY: sy,
         isLimitingColors: true,
+        seed: Math.floor(sx * 2 + sy * 2),
+        hue: Math.random() * 0.2,
         colorNoise: 0
       }
     );
-    a.setImage(images[0], "ship", true);
-    a.pos.y = 128;
+    a.imageName = `enemy_${sx}_${sy}`;
+    a.setImage(images[0], a.imageName, true);
   }
-  a.pos.x = 128 + Math.sin(stage_.ticks * 0.1) * 50;
+  a.pos.y += 1;
+  particle.emit(
+    `j_${a.imageName}`,
+    this.pos.x,
+    this.pos.y + this.size.y / 2,
+    Math.PI / 2,
+    {
+      hue: Math.random() * 0.2
+    }
+  );
 }
