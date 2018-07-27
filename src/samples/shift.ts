@@ -3,27 +3,40 @@ import * as screen from "./screen";
 import * as actor from "./actor";
 import * as particle from "./particle";
 
+let stage_: actor.Actor;
+
 window.onload = () => {
   screen.init();
+  stage_ = new actor.Actor(stage);
   update();
 };
 
-let ship: actor.Actor;
-let ticks = 0;
-
-async function update() {
+function update() {
   requestAnimationFrame(update);
-  if (ship == null) {
-    ship = new actor.Actor();
+  particle.update();
+  actor.update();
+}
+
+function stage(a: actor.Actor) {
+  if (a.isSpawning) {
+    new actor.Actor(ship);
+  }
+  if (Math.random() < 0.1) {
+    particle.emit("e1", Math.random() * 256, Math.random() * 256);
+  }
+}
+
+async function ship(a: actor.Actor) {
+  if (a.isSpawning) {
     const images = await pag.generateImagesPromise(
       `
-    --
-    --
-    --
-  ----
-  ----
-  ----
-    `,
+  --
+  --
+  --
+----
+----
+----
+  `,
       {
         isMirrorX: true,
         scale: 2,
@@ -32,14 +45,8 @@ async function update() {
         colorNoise: 0
       }
     );
-    ship.setImage(images[0], "ship", true);
-    ship.pos.y = 128;
+    a.setImage(images[0], "ship", true);
+    a.pos.y = 128;
   }
-  ship.pos.x = 128 + Math.sin(ticks * 0.1) * 50;
-  if (Math.random() < 0.1) {
-    particle.emit("e1", Math.random() * 256, Math.random() * 256);
-  }
-  particle.update();
-  actor.update();
-  ticks++;
+  a.pos.x = 128 + Math.sin(stage_.ticks * 0.1) * 50;
 }

@@ -3,6 +3,7 @@ export class Actor {
   args: any[];
   isAlive = true;
   ticks = 0;
+  isSpawning = true;
   pool = pool;
 
   constructor(public updateFunc: Function = null, ...args) {
@@ -24,6 +25,7 @@ export class Actor {
       this.updateFunc(this, ...this.args);
     }
     this.ticks++;
+    this.isSpawning = false;
   }
 
   remove() {
@@ -32,10 +34,6 @@ export class Actor {
     }
     this.isAlive = false;
     return true;
-  }
-
-  isSpawning() {
-    return this.ticks === 0;
   }
 }
 

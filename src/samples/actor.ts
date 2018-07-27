@@ -49,6 +49,7 @@ export class Actor extends sga.Actor {
   }
 
   update() {
+    super.update();
     if (this.sprite != null) {
       this.sprite.x = this.pos.x;
       this.sprite.y = this.pos.y;

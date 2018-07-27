@@ -61,7 +61,7 @@ interface Particle extends sga.Actor {
 }
 
 function particle(p: Particle, ppe: ppe.Particle) {
-  if (p.isSpawning()) {
+  if (p.isSpawning) {
     p.pos = { x: 0, y: 0 };
     p.baseSize = 16;
     p.scale = new PIXI.Point();
