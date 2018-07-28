@@ -1,4 +1,4 @@
-import * as ppc from "..";
+import * as ppc from "../..";
 import * as screen from "./screen";
 import * as sga from "./simpleGameActor";
 import Vector from "./vector";

@@ -1,7 +1,6 @@
 import * as PIXI from "pixi.js";
 import * as PIXIFilters from "pixi-filters";
 import * as particle from "./particle";
-import * as star from "./star";
 import * as text from "./text";
 
 export let app: PIXI.Application;
@@ -10,6 +9,7 @@ export let size: number;
 export let padding: number;
 
 export function init(
+  onBeforeParticleContainer,
   _size = 256,
   _padding = 24,
   backgroundColor = 0x111111,
@@ -38,7 +38,7 @@ export function init(
   background.endFill();
   backgroundContainer.addChild(background);
   filterContainer.addChild(backgroundContainer);
-  star.init(app, filterContainer, padding);
+  onBeforeParticleContainer(filterContainer);
   particle.init(app, filterContainer, padding);
   container = new PIXI.Container();
   container.x = container.y = padding;

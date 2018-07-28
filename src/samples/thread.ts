@@ -2,14 +2,14 @@ import * as PIXI from "pixi.js";
 import * as pag from "pixel-art-gen";
 import * as sss from "sounds-some-sounds";
 import * as ppe from "particle-pattern-emitter";
-import * as screen from "./screen";
-import Actor from "./actor";
-import * as sga from "./simpleGameActor";
-import * as text from "./text";
+import * as screen from "./util/screen";
+import Actor from "./util/actor";
+import * as sga from "./util/simpleGameActor";
+import * as text from "./util/text";
+import * as particle from "./util/particle";
+import * as pointer from "./util/pointer";
+import Vector from "./util/vector";
 import * as star from "./star";
-import * as particle from "./particle";
-import * as pointer from "./pointer";
-import Vector from "./vector";
 
 let stage_: Actor;
 let player_: Actor;
@@ -21,7 +21,9 @@ let scene: "title" | "game" | "gameOver";
 let sceneTicks = 0;
 
 window.onload = () => {
-  screen.init();
+  screen.init(container => {
+    star.init(screen.app, container, screen.padding);
+  });
   pag.setDefaultOptions({
     isMirrorX: true,
     scale: 2,
