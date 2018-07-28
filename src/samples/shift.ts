@@ -3,6 +3,8 @@ import * as screen from "./screen";
 import { Actor, update as updateActors } from "./actor";
 import * as star from "./star";
 import * as particle from "./particle";
+import * as pointer from "./pointer";
+import Vector from "./vector";
 
 let stage_: Actor;
 
@@ -10,11 +12,18 @@ window.onload = () => {
   screen.init();
   stage_ = new Actor(stage);
   pag.setSeed(0);
+  pointer.init(
+    screen.app.view,
+    new Vector(screen.size),
+    new Vector(screen.padding),
+    () => {}
+  );
   update();
 };
 
 function update() {
   requestAnimationFrame(update);
+  pointer.update();
   star.update();
   particle.update();
   updateActors();
@@ -22,6 +31,7 @@ function update() {
 
 function stage(a: Actor) {
   if (a.isSpawning) {
+    new Actor(cursor);
   }
   if (Math.random() < 0.05) {
     new Actor(enemy);
@@ -68,4 +78,15 @@ async function enemy(a) {
       hue: Math.random() * 0.2
     }
   );
+}
+
+function cursor(a: Actor) {
+  if (a.isSpawning) {
+    const g = new PIXI.Graphics();
+    g.beginFill(0xffffff);
+    g.drawCircle(0, 0, 5);
+    g.endFill();
+    a.setGraphics(g, screen.app);
+  }
+  this.pos = pointer.targetPos;
 }

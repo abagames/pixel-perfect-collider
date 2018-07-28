@@ -24,16 +24,7 @@ export class Actor extends sga.Actor {
       texture = PIXI.Texture.fromLoader(image, name);
       textures[name] = texture;
     }
-    if (this.sprite == null) {
-      this.sprite = new PIXI.Sprite(texture);
-      this.sprite.anchor.x = 0.5;
-      this.sprite.anchor.y = 0.5;
-      this.sprite.x = this.pos.x;
-      this.sprite.y = this.pos.y;
-      screen.container.addChild(this.sprite);
-    } else {
-      this.sprite.texture = texture;
-    }
+    this.setTextureToSprite(texture);
     this.size.x = image.width;
     this.size.y = image.height;
     if (isAddingCollider) {
@@ -49,8 +40,28 @@ export class Actor extends sga.Actor {
     this.onRemove = () => {
       if (this.sprite != null) {
         screen.container.removeChild(this.sprite);
+        this.sprite.anchor.x = 0.5;
+        this.sprite.anchor.y = 0.5;
       }
     };
+  }
+
+  setGraphics(g: PIXI.Graphics, app: PIXI.Application) {
+    let texture = app.renderer.generateTexture(g);
+    this.setTextureToSprite(texture);
+  }
+
+  setTextureToSprite(texture: PIXI.Texture) {
+    if (this.sprite == null) {
+      this.sprite = new PIXI.Sprite(texture);
+      this.sprite.anchor.x = 0.5;
+      this.sprite.anchor.y = 0.5;
+      this.sprite.x = this.pos.x;
+      this.sprite.y = this.pos.y;
+      screen.container.addChild(this.sprite);
+    } else {
+      this.sprite.texture = texture;
+    }
   }
 
   update() {

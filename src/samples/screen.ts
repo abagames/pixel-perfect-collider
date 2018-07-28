@@ -6,14 +6,16 @@ import * as star from "./star";
 export let app: PIXI.Application;
 export let container: PIXI.Container;
 export let size: number;
+export let padding: number;
 
 export function init(
   _size = 256,
-  padding = 24,
+  _padding = 24,
   backgroundColor = 0x111111,
   edgeColor = 0
 ) {
   size = _size;
+  padding = _padding;
   const appSize = size + padding * 2;
   app = new PIXI.Application({ width: appSize, height: appSize });
   app.view.setAttribute("id", "screen");
