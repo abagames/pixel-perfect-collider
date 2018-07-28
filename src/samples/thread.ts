@@ -215,15 +215,15 @@ async function player(a) {
         )
       );
     }
-    Promise.all(imagePromises).then(images => {
-      a.images = images.map(i => i[0]);
-    });
     a.pos.set(128, 200);
     pointer.setTargetPos(a.pos);
     a.mvSize = 0;
     a.pSzi = 0;
+    Promise.all(imagePromises).then(images => {
+      a.images = images.map(i => i[0]);
+    });
   }
-  if (a.pSzi == null) {
+  if (a.images == null) {
     return;
   }
   a.pos.set(pointer.targetPos);
