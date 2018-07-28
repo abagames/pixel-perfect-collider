@@ -33,12 +33,12 @@ let pool = new sga.Pool();
 
 function add() {
   for (let i = 0; i < 100; i++) {
-    let vy = Math.random() + 1;
+    let vy = Math.random() * 2 + 1;
     new sga.Actor(
       star,
       Math.random() * 256,
       Math.random() * 256,
-      vy,
+      vy / 3,
       vy + 1,
       (randomColor() << 16) | (randomColor() << 8) | randomColor(),
       pool

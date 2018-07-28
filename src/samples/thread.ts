@@ -80,7 +80,7 @@ function beginTitle() {
       letterHeightRatio: 1.1,
       hue: 0.4
     })[0],
-    "Title",
+    `Title_${pagSeed}`,
     false
   );
 }
