@@ -65,7 +65,7 @@ function beginTitle() {
   title = new Actor();
   title.pos.set(128, 80);
   title.setImage(
-    pag.generateImages("SHIFT", {
+    pag.generateImages("THREAD", {
       isMirrorX: false,
       isInnerEdge: true,
       scalePattern: 1.5,
