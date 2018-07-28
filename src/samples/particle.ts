@@ -50,10 +50,6 @@ export function update() {
   pool.update();
 }
 
-export function removeAll() {
-  pool.removeAll();
-}
-
 let pool = new sga.Pool();
 
 interface Particle extends sga.Actor {

@@ -1,92 +1,223 @@
+import * as PIXI from "pixi.js";
 import * as pag from "pixel-art-gen";
+import * as sss from "sounds-some-sounds";
+import * as ppe from "particle-pattern-emitter";
 import * as screen from "./screen";
-import { Actor, update as updateActors } from "./actor";
+import Actor from "./actor";
+import * as sga from "./simpleGameActor";
+import * as text from "./text";
 import * as star from "./star";
 import * as particle from "./particle";
 import * as pointer from "./pointer";
 import Vector from "./vector";
 
 let stage_: Actor;
+let player_: Actor;
+let score = 0;
+let scoreText: PIXI.Text;
+let gameOverText: PIXI.Text;
+let title: Actor;
+let scene: "title" | "game" | "gameOver";
+let sceneTicks = 0;
 
 window.onload = () => {
   screen.init();
-  stage_ = new Actor(stage);
-  pag.setSeed(0);
+  pag.setDefaultOptions({
+    isMirrorX: true,
+    scale: 2,
+    isLimitingColors: true,
+    colorLighting: 0.5,
+    colorNoise: 0
+  });
+  sss.init();
+  pag.setSeed(Math.random() * 9999999);
+  sss.setSeed(1);
+  ppe.setSeed(1);
   pointer.init(
     screen.app.view,
     new Vector(screen.size),
     new Vector(screen.padding),
-    () => {}
+    sss.playEmpty
   );
+  scoreText = text.add(0, 0);
+  gameOverText = text.add(128, 128);
+  gameOverText.visible = false;
+  gameOverText.text = "Game over";
+  gameOverText.anchor.x = gameOverText.anchor.y = 0.5;
+  stage_ = new Actor(stage);
+  beginTitle();
   update();
 };
 
 function update() {
   requestAnimationFrame(update);
+  sss.update();
   pointer.update();
   star.update();
   particle.update();
-  updateActors();
+  sga.pool.update();
+  scoreText.text = `${score}`;
+}
+
+function beginTitle() {
+  scene = "title";
+  gameOverText.visible = false;
+  title = new Actor();
+  title.pos.set(128, 80);
+  title.setImage(
+    pag.generateImages("SHIFT", {
+      isMirrorX: false,
+      isInnerEdge: true,
+      scalePattern: 1.5,
+      scale: 2,
+      isUsingLetterForm: true,
+      letterFormChar: "*",
+      letterFormFontFamily: text.family,
+      letterWidthRatio: 0.7,
+      letterHeightRatio: 1.1,
+      hue: 0.4
+    })[0],
+    "Title",
+    false
+  );
+}
+
+function beginGame() {
+  scene = "game";
+  gameOverText.visible = false;
+  sga.pool.removeAll();
+  stage_ = new Actor(stage);
+  player_ = new Actor(player);
+  sss.playBgm();
+  sss.playJingle("s_start");
+  stage_.ticks = 0;
+}
+
+function endGame() {
+  scene = "gameOver";
+  gameOverText.visible = true;
+  sss.stopBgm();
+  sceneTicks = 0;
 }
 
 function stage(a: Actor) {
-  if (a.isSpawning) {
-    new Actor(cursor);
+  if (
+    (scene === "title" || (scene === "gameOver" && sceneTicks > 20)) &&
+    pointer.isPressed
+  ) {
+    beginGame();
   }
-  if (Math.random() < 0.05) {
+  if (scene === "gameOver" && sceneTicks > 180) {
+    beginTitle();
+  }
+  if (Math.random() < 0.01 * (Math.sqrt(a.ticks / 100) + 1)) {
     new Actor(enemy);
   }
+  sceneTicks++;
 }
 
 async function enemy(a) {
   if (a.isSpawning) {
-    const sx = Math.floor(Math.random() * 4) * 0.5 + 1.5;
-    const sy = Math.floor(Math.random() * 4) * 0.5 + 1.5;
+    const sx = Math.floor(Math.random() * 6) * 0.5 + 1.5;
+    const sy = Math.floor(Math.random() * 6) * 0.5 + 1.5;
     a.pos.x = Math.random() * 256;
-    a.pos.y = -sy * 12;
+    a.pos.y = -sy * 8;
     const images = await pag.generateImagesPromise(
       `
-  --
-  --
-  --
-----
-----
-----
+--
+--
+ -
+ -
   `,
       {
-        isMirrorX: true,
-        scaleX: 2,
-        scaleY: 2,
         scalePatternX: sx,
         scalePatternY: sy,
-        isLimitingColors: true,
         seed: Math.floor(sx * 2 + sy * 2),
-        hue: Math.random() * 0.2,
-        colorNoise: 0
+        hue: Math.random() * 0.2
       }
     );
     a.imageName = `enemy_${sx}_${sy}`;
     a.setImage(images[0], a.imageName, true);
+    a.vy = 1 + Math.random() * (a.ticks / 100 + 1);
+    if (scene === "game") {
+      sss.play(
+        `s_${a.imageName}`,
+        1,
+        82 - Math.floor(sx + sy) * 3,
+        undefined,
+        0.5
+      );
+    }
   }
-  a.pos.y += 1;
+  a.pos.y += a.vy;
   particle.emit(
     `j_${a.imageName}`,
-    this.pos.x,
-    this.pos.y + this.size.y / 2,
-    Math.PI / 2,
+    a.pos.x,
+    a.pos.y - a.size.y / 2,
+    -Math.PI / 2,
     {
-      hue: Math.random() * 0.2
+      hue: 0.6 + Math.random() * 0.1,
+      countScale: 0.25
     }
   );
+  if (
+    player_ != null &&
+    player_.collider != null &&
+    player_.collider.test(a.collider)
+  ) {
+    player_.remove();
+    particle.emit("e_player", player_.pos.x, player_.pos.y, 0, {
+      sizeScale: 2,
+      countScale: 2
+    });
+    sss.playJingle("e_player", true, undefined, undefined, undefined, 5);
+    player_ = null;
+    endGame();
+  }
 }
 
-function cursor(a: Actor) {
+async function player(a) {
+  const maxSizeIndex = 7;
   if (a.isSpawning) {
-    const g = new PIXI.Graphics();
-    g.beginFill(0xffffff);
-    g.drawCircle(0, 0, 5);
-    g.endFill();
-    a.setGraphics(g, screen.app);
+    let imagePromises = [];
+    for (let i = 0; i < maxSizeIndex; i++) {
+      imagePromises.push(
+        pag.generateImagesPromise(
+          `
+  -
+  -
+- -
+---
+ --
+`,
+          {
+            scalePattern: i + 1,
+            hue: 0.4
+          }
+        )
+      );
+    }
+    Promise.all(imagePromises).then(images => {
+      a.images = images.map(i => i[0]);
+    });
+    a.pos.set(128, 200);
+    pointer.setTargetPos(a.pos);
+    a.mvSize = 0;
+    a.pszi = 0;
   }
-  this.pos = pointer.targetPos;
+  a.pos.set(pointer.targetPos);
+  a.pos.clamp(0, 255, 0, 255);
+  a.mvSize += (pointer.move.length() * 2 - a.mvSize) * 0.05;
+  if (a.images != null) {
+    const szi = Math.min(Math.floor(a.mvSize), maxSizeIndex - 1);
+    a.setImage(a.images[szi], `player_${szi}`, true);
+    particle.emit(`j_player`, a.pos.x, a.pos.y + a.size.y / 2, Math.PI / 2, {
+      hue: 0.3
+    });
+    if (a.pszi != szi) {
+      sss.play(`s_szi_${szi}`, 2, 50 + szi * 5, null, 0.25);
+      a.pszi = szi;
+    }
+    score += szi * szi;
+  }
 }

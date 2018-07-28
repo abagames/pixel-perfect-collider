@@ -42,6 +42,7 @@ export class Actor {
 
 export class Pool {
   actors: Actor[] = [];
+  isRemoving = false;
 
   add(actor: Actor) {
     this.actors.push(actor);
@@ -52,6 +53,10 @@ export class Pool {
       const actor = this.actors[i];
       if (actor.isAlive) {
         actor.update();
+      }
+      if (this.isRemoving) {
+        this.isRemoving = false;
+        break;
       }
       if (!actor.isAlive) {
         this.actors.splice(i, 1);
@@ -72,6 +77,7 @@ export class Pool {
       a.remove();
     });
     this.actors = [];
+    this.isRemoving = true;
   }
 }
 

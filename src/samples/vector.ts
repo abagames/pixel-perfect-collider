@@ -25,4 +25,13 @@ export default class Vector {
     this.x -= v.x;
     this.y -= v.y;
   }
+
+  clamp(xMin: number, xMax: number, yMin: number, yMax: number) {
+    this.x = Math.max(xMin, Math.min(this.x, xMax));
+    this.y = Math.max(yMin, Math.min(this.y, yMax));
+  }
+
+  length() {
+    return Math.sqrt(this.x * this.x + this.y * this.y);
+  }
 }

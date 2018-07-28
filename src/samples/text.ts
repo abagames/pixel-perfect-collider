@@ -1,13 +1,18 @@
 import * as WebFont from "webfontloader";
 import * as PIXI from "pixi.js";
-import { container } from "./screen";
 
 export let family: string;
+let container: PIXI.Container;
 
 export function init(
+  parent: PIXI.Container,
+  padding: number,
   _family = "Hannari",
   url = "https://fonts.googleapis.com/earlyaccess/hannari.css"
 ) {
+  container = new PIXI.Container();
+  container.x = container.y = padding;
+  parent.addChild(container);
   family = _family;
   return new Promise((resolve, reject) => {
     WebFont.load({

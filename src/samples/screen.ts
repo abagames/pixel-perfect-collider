@@ -2,6 +2,7 @@ import * as PIXI from "pixi.js";
 import * as PIXIFilters from "pixi-filters";
 import * as particle from "./particle";
 import * as star from "./star";
+import * as text from "./text";
 
 export let app: PIXI.Application;
 export let container: PIXI.Container;
@@ -42,6 +43,7 @@ export function init(
   container = new PIXI.Container();
   container.x = container.y = padding;
   filterContainer.addChild(container);
+  text.init(filterContainer, padding);
   const edgeContainer = new PIXI.Container();
   const edge = new PIXI.Graphics();
   edge.beginFill(edgeColor);

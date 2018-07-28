@@ -1,17 +1,14 @@
 import * as ppc from "..";
 import * as screen from "./screen";
 import * as sga from "./simpleGameActor";
+import Vector from "./vector";
 
 let textures = {};
 const removePaddingRatio = 0.25;
 
-export function update() {
-  sga.pool.update();
-}
-
-export class Actor extends sga.Actor {
-  pos = { x: 0, y: 0 };
-  size = { x: 0, y: 0 };
+export default class Actor extends sga.Actor {
+  pos = new Vector();
+  size = new Vector();
   sprite: PIXI.Sprite;
   collider: ppc.Collider;
   colliders: { [key: string]: ppc.Collider } = {};

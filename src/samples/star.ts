@@ -54,10 +54,6 @@ export function update() {
   pool.update();
 }
 
-export function removeAll() {
-  pool.removeAll();
-}
-
 interface Star extends sga.Actor {
   vy: number;
   baseSize: number;
