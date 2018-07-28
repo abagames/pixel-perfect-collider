@@ -50,18 +50,16 @@ class Star {
   }
 }
 
+let isColliding = false;
+
 function update() {
   requestAnimationFrame(update);
-  context.fillStyle = "white";
+  context.fillStyle = isColliding ? "pink" : "white";
   context.fillRect(0, 0, 256, 256);
   stars[0].draw(px, py);
   stars[1].draw(128, 128);
-  if (
+  isColliding =
     stars[0].collider != null &&
     stars[1].collider != null &&
-    stars[0].collider.test(stars[1].collider)
-  ) {
-    context.fillStyle = "black";
-    context.fillText("collide", 5, 15);
-  }
+    stars[0].collider.test(stars[1].collider);
 }
