@@ -192,6 +192,9 @@ async function player(a) {
   if (a.isSpawning) {
     let imagePromises = [];
     for (let i = 0; i < maxSizeIndex; i++) {
+      let ps = (i + 1) * 2;
+      let scale = Math.sqrt(ps) * 0.8;
+      let scalePattern = ps / scale;
       imagePromises.push(
         pag.generateImagesPromise(
           `
@@ -202,7 +205,8 @@ async function player(a) {
  --
 `,
           {
-            scalePattern: i + 1,
+            scale,
+            scalePattern,
             hue: 0.4
           }
         )
