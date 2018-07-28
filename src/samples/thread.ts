@@ -113,7 +113,7 @@ function endGame() {
 
 function stage(a: Actor) {
   if (
-    (scene === "title" || (scene === "gameOver" && sceneTicks > 20)) &&
+    (scene === "title" || (scene === "gameOver" && sceneTicks > 40)) &&
     pointer.isPressed
   ) {
     beginGame();
