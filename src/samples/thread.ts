@@ -160,6 +160,9 @@ async function enemy(a) {
       );
     }
   }
+  if (a.vy == null) {
+    return;
+  }
   a.pos.y += a.vy;
   particle.emit(
     `j_${a.imageName}`,
@@ -220,19 +223,20 @@ async function player(a) {
     a.mvSize = 0;
     a.pSzi = 0;
   }
+  if (a.pSzi == null) {
+    return;
+  }
   a.pos.set(pointer.targetPos);
   a.pos.clamp(0, 255, 0, 255);
   a.mvSize += (pointer.move.length() * 2 - a.mvSize) * 0.05;
-  if (a.images != null) {
-    const szi = Math.min(Math.floor(a.mvSize), maxSizeIndex - 1);
-    a.setImage(a.images[szi], `player_${szi}_${pagSeed}`, true);
-    particle.emit(`j_player`, a.pos.x, a.pos.y + a.size.y / 2, Math.PI / 2, {
-      hue: 0.3
-    });
-    if (a.pSzi != szi) {
-      sss.play(`s_szi_${szi}`, 2, 50 + szi * 5, null, 0.3);
-      a.pSzi = szi;
-    }
-    score += szi * szi;
+  const szi = Math.min(Math.floor(a.mvSize), maxSizeIndex - 1);
+  a.setImage(a.images[szi], `player_${szi}_${pagSeed}`, true);
+  particle.emit(`j_player`, a.pos.x, a.pos.y + a.size.y / 2, Math.PI / 2, {
+    hue: 0.3
+  });
+  if (a.pSzi != szi) {
+    sss.play(`s_szi_${szi}`, 2, 50 + szi * 5, null, 0.3);
+    a.pSzi = szi;
   }
+  score += szi * szi;
 }
