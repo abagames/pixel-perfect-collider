@@ -1,7 +1,7 @@
 const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 
-const sampleName = "thread";
+const sampleName = "stars";
 
 module.exports = function(env) {
   const config = {

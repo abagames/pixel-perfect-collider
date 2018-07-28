@@ -9,7 +9,7 @@ import * as text from "./util/text";
 import * as particle from "./util/particle";
 import * as pointer from "./util/pointer";
 import Vector from "./util/vector";
-import * as star from "./star";
+import * as star from "./util/star";
 
 let stage_: Actor;
 let player_: Actor;

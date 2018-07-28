@@ -1,5 +1,5 @@
 import * as PIXI from "pixi.js";
-import * as sga from "./util/simpleGameActor";
+import * as sga from "./simpleGameActor";
 
 let starContainer: PIXI.particles.ParticleContainer;
 let starTexture: PIXI.Texture;
