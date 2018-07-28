@@ -3,7 +3,7 @@ import * as pag from "pixel-art-gen";
 import * as sss from "sounds-some-sounds";
 import * as ppe from "particle-pattern-emitter";
 import * as screen from "./util/screen";
-import Actor from "./util/actor";
+import { Actor, reset as resetActor } from "./util/actor";
 import * as sga from "./util/simpleGameActor";
 import * as text from "./util/text";
 import * as particle from "./util/particle";
@@ -19,6 +19,7 @@ let gameOverText: PIXI.Text;
 let title: Actor;
 let scene: "title" | "game" | "gameOver";
 let sceneTicks = 0;
+let pagSeed: number;
 
 window.onload = () => {
   screen.init(container => {
@@ -32,7 +33,7 @@ window.onload = () => {
     colorNoise: 0
   });
   sss.init();
-  pag.setSeed(Math.random() * 9999999);
+  setPagSeed();
   sss.setSeed(1);
   ppe.setSeed(1);
   pointer.init(
@@ -88,11 +89,19 @@ function beginGame() {
   scene = "game";
   gameOverText.visible = false;
   sga.pool.removeAll();
+  setPagSeed();
   stage_ = new Actor(stage);
   player_ = new Actor(player);
   sss.playBgm();
   sss.playJingle("s_start");
+  score = 0;
   stage_.ticks = 0;
+}
+
+function setPagSeed() {
+  pagSeed = Math.random() * 9999999;
+  resetActor();
+  pag.setSeed(pagSeed);
 }
 
 function endGame() {
@@ -138,16 +147,16 @@ async function enemy(a) {
         hue: Math.random() * 0.2
       }
     );
-    a.imageName = `enemy_${sx}_${sy}`;
+    a.imageName = `enemy_${sx}_${sy}_${pagSeed}`;
     a.setImage(images[0], a.imageName, true);
     a.vy = 1 + Math.random() * (a.ticks / 100 + 1);
     if (scene === "game") {
       sss.play(
-        `s_${a.imageName}`,
+        `h_${a.imageName}`,
         1,
         82 - Math.floor(sx + sy) * 3,
         undefined,
-        0.5
+        0.3
       );
     }
   }
@@ -205,20 +214,20 @@ async function player(a) {
     a.pos.set(128, 200);
     pointer.setTargetPos(a.pos);
     a.mvSize = 0;
-    a.pszi = 0;
+    a.pSzi = 0;
   }
   a.pos.set(pointer.targetPos);
   a.pos.clamp(0, 255, 0, 255);
   a.mvSize += (pointer.move.length() * 2 - a.mvSize) * 0.05;
   if (a.images != null) {
     const szi = Math.min(Math.floor(a.mvSize), maxSizeIndex - 1);
-    a.setImage(a.images[szi], `player_${szi}`, true);
+    a.setImage(a.images[szi], `player_${szi}_${pagSeed}`, true);
     particle.emit(`j_player`, a.pos.x, a.pos.y + a.size.y / 2, Math.PI / 2, {
       hue: 0.3
     });
-    if (a.pszi != szi) {
-      sss.play(`s_szi_${szi}`, 2, 50 + szi * 5, null, 0.25);
-      a.pszi = szi;
+    if (a.pSzi != szi) {
+      sss.play(`s_szi_${szi}`, 2, 50 + szi * 5, null, 0.3);
+      a.pSzi = szi;
     }
     score += szi * szi;
   }

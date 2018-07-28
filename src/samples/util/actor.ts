@@ -6,7 +6,7 @@ import Vector from "./vector";
 let textures = {};
 const removePaddingRatio = 0.25;
 
-export default class Actor extends sga.Actor {
+export class Actor extends sga.Actor {
   pos = new Vector();
   size = new Vector();
   sprite: PIXI.Sprite;
@@ -79,4 +79,9 @@ export default class Actor extends sga.Actor {
       this.remove();
     }
   }
+}
+
+export function reset() {
+  textures = {};
+  ppc.clearCache();
 }
