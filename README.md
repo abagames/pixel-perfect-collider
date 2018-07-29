@@ -10,7 +10,7 @@ Pixel perfect collision detector.
 
 [thread](https://abagames.github.io/pixel-perfect-collider/index.html?thread)
 
-[![stars screenshot](https://abagames.github.io/pixel-perfect-collider/thread.gif)](https://abagames.github.io/pixel-perfect-collider/index.html?tread)
+[![stars screenshot](https://abagames.github.io/pixel-perfect-collider/thread.gif)](https://abagames.github.io/pixel-perfect-collider/index.html?thread)
 
 ### How to use
 
