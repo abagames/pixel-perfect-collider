@@ -17,6 +17,7 @@ export class Collider {
   private anchor = { x: 0, y: 0 };
   private size = { x: 0, y: 0 };
   private pixelBits: number[][] = [];
+  private isPositionSet = false;
 
   constructor(image: HTMLImageElement) {
     this.size.x = image.width;
@@ -68,6 +69,7 @@ export class Collider {
   setPos(x: number, y: number) {
     this.pos.x = Math.floor(x - this.size.x * this.anchor.x);
     this.pos.y = Math.floor(y - this.size.y * this.anchor.y);
+    this.isPositionSet = true;
   }
 
   setAnchor(x: number, y: number) {
@@ -76,6 +78,9 @@ export class Collider {
   }
 
   test(other: Collider) {
+    if (!this.isPositionSet || !other.isPositionSet) {
+      return false;
+    }
     const offset = { x: other.pos.x - this.pos.x, y: other.pos.y - this.pos.y };
     if (
       offset.x < -other.size.x ||
